@@ -7,8 +7,7 @@ public class Game extends Product implements Buyable {
 	int price;
 	
 	public Game(String title, Person person) {
-		this.title = title;
-		this.person = person;
+		super(title, person);
 	}
 	
 	public boolean isPreOrdered() {

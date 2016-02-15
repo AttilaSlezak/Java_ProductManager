@@ -3,8 +3,7 @@ public class Book extends Product {
 	Person author;
 	
 	public Book(String title, Person person) {
-		this.title = title;
-		this.person = person;
+		super(title, person);
 	}
 	
 	public Person getAuthor() {

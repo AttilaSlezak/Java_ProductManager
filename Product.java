@@ -4,8 +4,10 @@ public abstract class Product {
 	String title;
 	Person person;
 	
-	public Product() {
+	public Product(String title, Person person) {
 		id = IdGenerator.generate(this);
+		this.title = title;
+		this.person = person;		
 	}
 	
 	public String getTitle() {

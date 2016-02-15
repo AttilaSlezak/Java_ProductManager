@@ -11,8 +11,7 @@ class Movie extends Product implements Buyable
 	//ArrayList<Person> cast;
 	
 	public Movie(String title, Person person) {
-		this.title = title;
-		this.person = person;
+		super(title, person);
 	}
 	
 	public Genre getGenre() {

@@ -12,85 +12,42 @@ public class RentManager {
 		return income;
 	}
 	
+	public static Person createPersonObjects(String firstName, String lastName, Gender gender, int salary) 
+	{
+		Person onePerson = new Person();
+		onePerson.setFirstName(firstName);
+		onePerson.setLastName(lastName);
+		onePerson.setGender(gender);
+		onePerson.setSalary(salary);
+		return onePerson;
+	}
+	
 	public static void main(String[] args) {
+		
 		Person[] defaultActors = new Person[11];
 		
-		defaultActors[0] = new Person();
+		defaultActors[0] = createPersonObjects("Harrison", "Ford", Gender.MALE, 500000);
 		Person harrisonFord = defaultActors[0];
-		harrisonFord.setFirstName("Harrison");
-		harrisonFord.setLastName("Ford");
-		harrisonFord.setGender(Gender.MALE);
-		harrisonFord.setSalary(500000);
-		
-		defaultActors[1] = new Person();
+		defaultActors[1] = createPersonObjects("Mark", "Hamill", Gender.MALE, 300000);
 		Person markHamill = defaultActors[1];
-		markHamill.setFirstName("Mark");
-		markHamill.setLastName("Hamill");
-		markHamill.setGender(Gender.MALE);
-		markHamill.setSalary(300000);
-		
-		defaultActors[2] = new Person();
+		defaultActors[2] = createPersonObjects("Carrie", "Fisher", Gender.FEMALE, 300000);
 		Person carrieFisher = defaultActors[2];
-		carrieFisher.setFirstName("Carrie");
-		carrieFisher.setLastName("Fisher");
-		carrieFisher.setGender(Gender.FEMALE);
-		carrieFisher.setSalary(300000);
-		
-		defaultActors[3] = new Person();
+		defaultActors[3] = createPersonObjects("Karen", "Allen", Gender.FEMALE, 200000);
 		Person karenAllen = defaultActors[3];
-		karenAllen.setFirstName("Karen");
-		karenAllen.setLastName("Allen");
-		karenAllen.setGender(Gender.FEMALE);
-		karenAllen.setSalary(200000);
-		
-		defaultActors[4] = new Person();
+		defaultActors[4] = createPersonObjects("Emily", "Bronte", Gender.FEMALE, 80000);
 		Person emilyBronte = defaultActors[4];
-		emilyBronte.setFirstName("Emily");
-		emilyBronte.setLastName("Bronte");
-		emilyBronte.setGender(Gender.FEMALE);
-		emilyBronte.setSalary(80000);
-		
-		defaultActors[5] = new Person();
+		defaultActors[5] = createPersonObjects("Robert Cecil", "Martin", Gender.MALE, 180000);
 		Person robertMartin = defaultActors[5];
-		robertMartin.setFirstName("Robert Cecil");
-		robertMartin.setLastName("Martin");
-		robertMartin.setGender(Gender.MALE);
-		robertMartin.setSalary(180000);
-		
-		defaultActors[6] = new Person();
+		defaultActors[6] = createPersonObjects("Chris", "Sawyer", Gender.MALE, 220000);
 		Person chrisSawyer = defaultActors[6];
-		chrisSawyer.setFirstName("Chris");
-		chrisSawyer.setLastName("Sawyer");
-		chrisSawyer.setGender(Gender.MALE);
-		chrisSawyer.setSalary(220000);
-		
-		defaultActors[7] = new Person();
+		defaultActors[7] = createPersonObjects("Sid", "Meyer", Gender.MALE, 300000);
 		Person sidMeyer = defaultActors[7];
-		sidMeyer.setFirstName("Sid");
-		sidMeyer.setLastName("Meyer");
-		sidMeyer.setGender(Gender.MALE);
-		sidMeyer.setSalary(300000);
-		
-		defaultActors[8] = new Person();
+		defaultActors[8] = createPersonObjects("Will", "Wright", Gender.MALE, 500000);
 		Person willWright = defaultActors[8];
-		willWright.setFirstName("Will");
-		willWright.setLastName("Wright");
-		willWright.setGender(Gender.MALE);
-		willWright.setSalary(280000);
-
-		defaultActors[9] = new Person();
+		defaultActors[9] = createPersonObjects("John", "Newman", Gender.MALE, 70000);
 		Person johnNewman = defaultActors[9];
-		johnNewman.setFirstName("John");
-		johnNewman.setLastName("Newman");
-		johnNewman.setGender(Gender.MALE);
-		johnNewman.setSalary(70000);
-
-		defaultActors[10] = new Person();
+		defaultActors[10] = createPersonObjects("Kate", "Johansson", Gender.FEMALE, 500000);
 		Person kateJohansson = defaultActors[10];
-		kateJohansson.setFirstName("Kate");
-		kateJohansson.setLastName("Johansson");
-		kateJohansson.setGender(Gender.FEMALE);
-		kateJohansson.setSalary(80000);
 		
 		Product[] defaultProducts = new Product[6];
 		
@@ -142,13 +99,13 @@ public class RentManager {
 		defaultProducts[5] = new Book("Clean Code", johnNewman);
 		Book cleanCode = (Book) defaultProducts[5];
 		cleanCode.setAuthor(robertMartin);
-		
+
 		// Printing out the investment of the products:
 		
 		System.out.println("Investment of Star Wars: " + starWars.getInvestment());
 		System.out.println("Investment of Indiana Jones: " + indianaJones.getInvestment());
 		System.out.println("Investment of Civilization: " + civilization.getInvestment());
-		System.out.println("Investment of The Sims: " + theSims.getInvestment());
+		System.out.println("Investment of The Sims: " + theSims.getInvestment());														
 		System.out.println("Investment of Wuthering Heights: " + wutheringHeights.getInvestment());
 		System.out.println("Investment of Clean Code: " + cleanCode.getInvestment());
 		
@@ -159,5 +116,4 @@ public class RentManager {
 		buyableProducts.add(theSims);
 		System.out.println("Total preferred income: " + incomeSummarizer(buyableProducts));
 	}
-
 }
