@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class RentManager {
@@ -30,40 +29,14 @@ public class RentManager {
 		return income;
 	} 
 	
-	public static Person createPersonObject(String firstName, String lastName, Gender gender, int salary) {
-		Person onePerson = new Person();
-		onePerson.setFirstName(firstName);
-		onePerson.setLastName(lastName);
-		onePerson.setGender(gender);
-		onePerson.setSalary(salary);
-		return onePerson;
-	}
-	
-	public static List<Buyable> createBuyableList(Buyable[] buyableProducts) {
-		List<Buyable> buyableList = new ArrayList<>();
-		for (Buyable buyable : buyableProducts) {
-			buyableList.add(buyable);
+	public static List<Buyable> listBuyables(List<Product> products) {
+		List<Buyable> buyables = new ArrayList<>();
+		for (Product oneProduct : products) {
+			if (oneProduct instanceof Buyable) {
+				buyables.add((Buyable)oneProduct);
+			}
 		}
-		return buyableList;
-	}
-	
-	public static Movie createMovieObject(
-			String title, Person customer, Genre genre, Long duration, double rate, Person[] cast, int price) {
-		Movie oneMovie = new Movie(title, customer);
-		oneMovie.setGenre(genre);
-		oneMovie.setDuration(duration);
-		oneMovie.setRate(rate);
-		oneMovie.setCast(Arrays.asList(cast));
-		oneMovie.setPrice(price);
-		return oneMovie;
-	}
-	
-	public static Game createGameObject(String title, Person customer, boolean preOrdered, Person[] staff, int price) {
-		Game oneGame = new Game(title, customer);
-		oneGame.setPreOrdered(true);
-		oneGame.setStaff(Arrays.asList(staff));
-		oneGame.setPrice(150);
-		return oneGame;
+		return buyables;
 	}
 	
 	private static void printPersonList(List<Person> persons) {
@@ -121,7 +94,7 @@ public class RentManager {
 		return objIn;
 	}
 		
-	public static void save(Object[] objOut, String path) {
+	public static void save(List<Object> objOut, String path) {
 		try {
 			FileOutputStream fileStream = new FileOutputStream(path);
 			ObjectOutputStream os = new ObjectOutputStream(fileStream);
@@ -209,69 +182,24 @@ public class RentManager {
 	
 	public static void main(String[] args) {
 		
-		Person[] defaultPersons = new Person[11];
+		List<Object> objects = ObjectCreator.initObjects();
+		List<Person> persons = castPersonFromObj(objects);
+		List<Product> products = castProductFromObj(objects);
+		List<Buyable> buyableProducts = listBuyables(products);
 		
-		defaultPersons[0] = createPersonObject("Harrison", "Ford", Gender.MALE, 500000);
-		Person harrisonFord = defaultPersons[0];
-		defaultPersons[1] = createPersonObject("Mark", "Hamill", Gender.MALE, 300000);
-		Person markHamill = defaultPersons[1];
-		defaultPersons[2] = createPersonObject("Carrie", "Fisher", Gender.FEMALE, 300000);
-		Person carrieFisher = defaultPersons[2];
-		defaultPersons[3] = createPersonObject("Karen", "Allen", Gender.FEMALE, 200000);
-		Person karenAllen = defaultPersons[3];
-		defaultPersons[4] = createPersonObject("Emily", "Bronte", Gender.FEMALE, 80000);
-		Person emilyBronte = defaultPersons[4];
-		defaultPersons[5] = createPersonObject("Robert Cecil", "Martin", Gender.MALE, 180000);
-		Person robertMartin = defaultPersons[5];
-		defaultPersons[6] = createPersonObject("Chris", "Sawyer", Gender.MALE, 220000);
-		Person chrisSawyer = defaultPersons[6];
-		defaultPersons[7] = createPersonObject("Sid", "Meyer", Gender.MALE, 300000);
-		Person sidMeyer = defaultPersons[7];
-		defaultPersons[8] = createPersonObject("Will", "Wright", Gender.MALE, 500000);
-		Person willWright = defaultPersons[8];
-		defaultPersons[9] = createPersonObject("John", "Newman", Gender.MALE, 70000);
-		Person johnNewman = defaultPersons[9];
-		defaultPersons[10] = createPersonObject("Kate", "Johansson", Gender.FEMALE, 500000);
-		Person kateJohansson = defaultPersons[10];
+		System.out.println("People's name:");
+		printPersonList(persons);
 		
-		Product[] defaultProducts = new Product[6];
-		
-		Person[] starWarsCast = {harrisonFord, markHamill, carrieFisher};
-		defaultProducts[0] = createMovieObject("Star Wars", johnNewman, Genre.SCI_FI, 150l, 5.0, starWarsCast, 120);
-		Movie starWars = (Movie) defaultProducts[0];
-		
-		Person[] indiJonesCast = {harrisonFord, karenAllen};
-		defaultProducts[1] = createMovieObject("Indiana Jones", kateJohansson, Genre.ACTION, 180l, 4.9, indiJonesCast, 100);
-		Movie indianaJones = (Movie) defaultProducts[1];
-		
-		Person[] civStaff = {sidMeyer, robertMartin};
-		defaultProducts[2] = createGameObject("Civilization V", johnNewman, true, civStaff, 150);
-		Game civilization = (Game) defaultProducts[2];
-		
-		Person[] simsStaff = {willWright, chrisSawyer};
-		defaultProducts[3] = createGameObject("The Sims", kateJohansson, false, simsStaff, 170);
-		Game theSims = (Game) defaultProducts[3];
-		
-		defaultProducts[4] = new Book("Wuthering Heights", kateJohansson);
-		Book wutheringHeights = (Book) defaultProducts[4];
-		wutheringHeights.setAuthor(emilyBronte);
-	
-		defaultProducts[5] = new Book("Clean Code", johnNewman);
-		Book cleanCode = (Book) defaultProducts[5];
-		cleanCode.setAuthor(robertMartin);
-		
-		System.out.println("Investment of the products:");
-		for (Product oneProduct : defaultProducts) {
+		System.out.println("\nInvestment of the products:");
+		for (Product oneProduct : products) {
 			System.out.println("Investment of " + oneProduct.getTitle() + ": " + oneProduct.getInvestment());
 		}
 		
-		Buyable[] buyableProducts = {starWars, indianaJones, civilization, theSims};
-		System.out.println("Total preferred income: " + incomeSummarizer(createBuyableList(buyableProducts)));
+		System.out.println("Total preferred income: " + incomeSummarizer(buyableProducts));
 		
 		String productPath = "product.ser";
 		String personPath = "person.ser";
-		save(defaultProducts, productPath);
-		save(defaultPersons, personPath);
+		save(objects, productPath);
 		List<Object> newObjList = load(productPath);
 		newObjList.addAll(load(personPath));
 		List<Product> newProducts = castProductFromObj(newObjList);
