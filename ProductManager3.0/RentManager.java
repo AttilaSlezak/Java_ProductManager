@@ -65,7 +65,39 @@ public class RentManager {
 		oneGame.setPrice(150);
 		return oneGame;
 	}
-		
+	
+	private static void printPersonList(List<Person> persons) {
+		for (Person onePerson : persons) {
+			System.out.println(onePerson.firstName + " " + onePerson.lastName);
+		}
+	}
+	
+	private static void printProductList(List<Product> products) {
+		for (Product oneProduct : products) {
+			System.out.println(oneProduct.getTitle() + ": " + oneProduct.getInvestment());
+		}
+	}
+	
+	private static List<Person> castPersonFromObj(List<Object> objIn) {
+		List<Person> result = new ArrayList<>();
+		for (Object oneObj : objIn) {
+			if (oneObj instanceof Person) {
+				result.add((Person)oneObj);
+			} 
+		}
+		return result;
+	}
+	
+	private static List<Product> castProductFromObj(List<Object> objIn) {
+		List<Product> result = new ArrayList<>();
+		for (Object oneObj : objIn) {
+			if (oneObj instanceof Product) {
+				result.add((Product)oneObj);
+			}
+		}	
+		return result;
+	}
+	
 	public static List<Object> load(String path) {
 		List<Object> objIn = new ArrayList<>();
 		Object oneObj;
@@ -136,9 +168,7 @@ public class RentManager {
 		List<Object> objIn = new ArrayList<>();
 		Object oneObj;
 		try {
-			System.out.println("Itt még van");
 			while ((oneObj = objInStreamSocket.readObject()) != null) {
-				System.out.println(oneObj);
 				objIn.add(oneObj);
 			}
 		} catch (UnknownHostException e) {
@@ -163,7 +193,6 @@ public class RentManager {
 				if (serverCommands.isEmpty() && ioMode != ServerMode.LOAD) {
 					break;
 				} else if (ioMode == ServerMode.LOAD) {
-					System.out.println("Itt járok most.");
 					objIn = loadServer();
 					ioMode = ServerMode.SAVE;
 				} else if (serverCommands.get(0) instanceof Command) {
@@ -231,6 +260,7 @@ public class RentManager {
 		Book cleanCode = (Book) defaultProducts[5];
 		cleanCode.setAuthor(robertMartin);
 		
+		System.out.println("Investment of the products:");
 		for (Product oneProduct : defaultProducts) {
 			System.out.println("Investment of " + oneProduct.getTitle() + ": " + oneProduct.getInvestment());
 		}
@@ -244,31 +274,21 @@ public class RentManager {
 		save(defaultPersons, personPath);
 		List<Object> newObjList = load(productPath);
 		newObjList.addAll(load(personPath));
-		List<Product> newProducts = new ArrayList<>();
-		List<Person> newPersons = new ArrayList<>();
-		for (Object oneObj : newObjList) {
-			if (oneObj instanceof Product) {
-				newProducts.add((Product)oneObj);
-			} else if (oneObj instanceof Person) {
-			    newPersons.add((Person)oneObj);
-			}
-		}
-		for (Product oneProduct : newProducts) {
-			System.out.println(oneProduct.getTitle() + ": " + oneProduct.getInvestment());
-		}
-		for (Person onePerson : newPersons) {
-			System.out.println(onePerson.firstName + " " + onePerson.lastName);
-		}
+		List<Product> newProducts = castProductFromObj(newObjList);
+		List<Person> newPersons = castPersonFromObj(newObjList);
+		
+		System.out.println("\nGot data from file:");
+		printProductList(newProducts);
+		printPersonList(newPersons);
+		
 		serverCommands.add(Command.PUT);
 		serverCommands.addAll(newProducts);
-		serverCommands.add(Command.GET);
-		List<Object> dataFromServer = serverIOSwitch();
-		System.out.println(dataFromServer.size());
-		serverCommands.add(Command.GET);
-		serverCommands.add(Command.PUT);
 		serverCommands.addAll(newPersons);
+		serverCommands.add(Command.GET);
 		serverCommands.add(Command.EXIT);
-		dataFromServer = serverIOSwitch();
-		System.out.println(dataFromServer.size());
+		List<Object> dataFromServer = serverIOSwitch();
+		System.out.println("\nGot data from the server:");
+		printProductList(castProductFromObj(dataFromServer));
+		printPersonList(castPersonFromObj(dataFromServer));
 	}
 }
